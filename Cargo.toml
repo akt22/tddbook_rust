@@ -1,0 +1,6 @@
+[package]
+name = "tddbook"
+version = "0.1.0"
+authors = ["Ryo Akita <akt.t.ksh.thy@gmail.com>"]
+
+[dependencies]
