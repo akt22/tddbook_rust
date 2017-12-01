@@ -9,7 +9,9 @@ impl Dollar {
     }
 
     pub fn times(&self, multiplier: i32) -> Dollar {
-        Dollar { amount: self.amount * multiplier }
+        Dollar {
+            amount: self.amount * multiplier,
+        }
     }
 
     pub fn equals(&self, object: Dollar) -> bool {
