@@ -4,10 +4,6 @@
 pub trait IMoney {
     fn amount(&self) -> i32;
     fn currency(&self) -> &String;
-
-    fn equals<T: IMoney>(&self, object: T) -> bool {
-        self.amount() == object.amount() && self.currency() == object.currency()
-    }
 }
 
 #[derive(Debug, PartialEq)]
@@ -46,6 +42,10 @@ impl Money {
             amount: amount,
             currency: "CHF".to_string(),
         }
+    }
+
+    pub fn equals<T: IMoney>(&self, object: T) -> bool {
+        self.amount() == object.amount() && self.currency() == object.currency()
     }
 
     pub fn times(&self, multiplier: i32) -> Money {
