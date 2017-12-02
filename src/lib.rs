@@ -27,18 +27,29 @@ impl IMoney for Money {
 }
 
 impl Money {
-    pub fn dollar(amount: i32) -> Dollar {
-        Dollar {
+    pub fn new(amount: i32, currency: String) -> Money {
+        Money {
+            amount: amount,
+            currency: currency,
+        }
+    }
+
+    pub fn dollar(amount: i32) -> Money {
+        Money {
             amount: amount,
             currency: "USD".to_string(),
         }
     }
 
-    pub fn franc(amount: i32) -> Franc {
-        Franc {
+    pub fn franc(amount: i32) -> Money {
+        Money {
             amount: amount,
             currency: "CHF".to_string(),
         }
+    }
+
+    pub fn times(&self, multiplier: i32) -> Money {
+        Money::new(self.amount * multiplier, self.currency.to_string())
     }
 }
 
@@ -51,27 +62,10 @@ pub struct Dollar {
     currency: String,
 }
 
-impl IMoney for Dollar {
-    fn amount(&self) -> i32 {
-        self.amount
-    }
-
-    fn currency(&self) -> &String {
-        &self.currency
-    }
-}
-
 impl Dollar {
-    pub fn new(amount: i32) -> Dollar {
-        Dollar {
+    pub fn new(amount: i32) -> Money {
+        Money {
             amount: amount,
-            currency: "USD".to_string(),
-        }
-    }
-
-    pub fn times(&self, multiplier: i32) -> Dollar {
-        Dollar {
-            amount: self.amount * multiplier,
             currency: "USD".to_string(),
         }
     }
@@ -86,27 +80,10 @@ pub struct Franc {
     currency: String,
 }
 
-impl IMoney for Franc {
-    fn amount(&self) -> i32 {
-        self.amount
-    }
-
-    fn currency(&self) -> &String {
-        &self.currency
-    }
-}
-
 impl Franc {
-    pub fn new(amount: i32) -> Franc {
-        Franc {
+    pub fn new(amount: i32) -> Money {
+        Money {
             amount: amount,
-            currency: "CHF".to_string(),
-        }
-    }
-
-    pub fn times(&self, multiplier: i32) -> Franc {
-        Franc {
-            amount: self.amount * multiplier,
             currency: "CHF".to_string(),
         }
     }
@@ -117,6 +94,7 @@ impl Franc {
 // ----------------------------------
 #[cfg(test)]
 mod tests {
+    use super::Franc;
     use super::IMoney;
     use super::Money;
 
@@ -141,5 +119,16 @@ mod tests {
         let five = Money::franc(5);
         assert_eq!(Money::franc(10), five.times(2));
         assert_eq!(Money::franc(15), five.times(3));
+    }
+
+    #[test]
+    fn test_currency() {
+        assert_eq!("USD", Money::dollar(1).currency());
+        assert_eq!("CHF", Money::franc(1).currency());
+    }
+
+    #[test]
+    fn test_different_class_equality() {
+        assert!(Money::new(10, "CHF".to_string()).equals(Franc::new(10)));
     }
 }
