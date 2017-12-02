@@ -1,12 +1,27 @@
 // ==================================
-// Money
+// IMoney
 // ----------------------------------
-pub trait Money {
+pub trait IMoney {
     fn amount(&self) -> i32;
     fn currency(&self) -> &String;
 
-    fn equals<T: Money>(&self, object: T) -> bool {
+    fn equals<T: IMoney>(&self, object: T) -> bool {
         self.amount() == object.amount() && self.currency() == object.currency()
+    }
+}
+
+pub struct Money {
+    amount: i32,
+    currency: String,
+}
+
+impl IMoney for Money {
+    fn amount(&self) -> i32 {
+        self.amount
+    }
+
+    fn currency(&self) -> &String {
+        &self.currency
     }
 }
 
@@ -19,7 +34,7 @@ pub struct Dollar {
     currency: String,
 }
 
-impl Money for Dollar {
+impl IMoney for Dollar {
     fn amount(&self) -> i32 {
         self.amount
     }
@@ -54,7 +69,7 @@ pub struct Franc {
     currency: String,
 }
 
-impl Money for Franc {
+impl IMoney for Franc {
     fn amount(&self) -> i32 {
         self.amount
     }
@@ -87,6 +102,7 @@ impl Franc {
 mod tests {
     use super::Dollar;
     use super::Franc;
+    use super::IMoney;
     use super::Money;
 
     #[test]
