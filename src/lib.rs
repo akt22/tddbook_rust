@@ -44,6 +44,7 @@ impl Money {
         }
     }
 
+    // IMoney traitを実装している必要がある
     pub fn equals<T: IMoney>(&self, object: T) -> bool {
         self.amount() == object.amount() && self.currency() == object.currency()
     }
@@ -54,38 +55,19 @@ impl Money {
 }
 
 // ==================================
-// Dollar
+// etc
 // ----------------------------------
-#[derive(Debug, PartialEq)]
-pub struct Dollar {
-    amount: i32,
-    currency: String,
-}
-
-impl Dollar {
-    pub fn new(amount: i32) -> Money {
-        Money {
-            amount: amount,
-            currency: "USD".to_string(),
-        }
+pub fn new_dollar(amount: i32) -> Money {
+    Money {
+        amount: amount,
+        currency: "USD".to_string(),
     }
 }
 
-// ==================================
-// Franc
-// ----------------------------------
-#[derive(Debug, PartialEq)]
-pub struct Franc {
-    amount: i32,
-    currency: String,
-}
-
-impl Franc {
-    pub fn new(amount: i32) -> Money {
-        Money {
-            amount: amount,
-            currency: "CHF".to_string(),
-        }
+pub fn new_franc(amount: i32) -> Money {
+    Money {
+        amount: amount,
+        currency: "CHF".to_string(),
     }
 }
 
@@ -94,7 +76,6 @@ impl Franc {
 // ----------------------------------
 #[cfg(test)]
 mod tests {
-    use super::Franc;
     use super::IMoney;
     use super::Money;
 
@@ -109,26 +90,12 @@ mod tests {
     fn test_equality() {
         assert!(Money::dollar(5).equals(Money::dollar(5)));
         assert_eq!(false, Money::dollar(5).equals(Money::dollar(6)));
-        assert!(Money::franc(5).equals(Money::franc(5)));
-        assert_eq!(false, Money::franc(5).equals(Money::franc(6)));
         assert_eq!(false, Money::franc(5).equals(Money::dollar(5)));
-    }
-
-    #[test]
-    fn test_franc_multiplication() {
-        let five = Money::franc(5);
-        assert_eq!(Money::franc(10), five.times(2));
-        assert_eq!(Money::franc(15), five.times(3));
     }
 
     #[test]
     fn test_currency() {
         assert_eq!("USD", Money::dollar(1).currency());
         assert_eq!("CHF", Money::franc(1).currency());
-    }
-
-    #[test]
-    fn test_different_class_equality() {
-        assert!(Money::new(10, "CHF".to_string()).equals(Franc::new(10)));
     }
 }
