@@ -1,9 +1,22 @@
 // ==================================
+// Money
+// ----------------------------------
+pub trait Money {
+    fn amount(&self) -> i32;
+}
+
+// ==================================
 // Dollar
 // ----------------------------------
 #[derive(Debug, PartialEq)]
 pub struct Dollar {
     amount: i32,
+}
+
+impl Money for Dollar {
+    fn amount(&self) -> i32 {
+        self.amount
+    }
 }
 
 impl Dollar {
@@ -17,9 +30,8 @@ impl Dollar {
         }
     }
 
-    pub fn equals(&self, object: Dollar) -> bool {
-        let dollar = object;
-        self.amount == dollar.amount
+    pub fn equals<T: Money>(&self, object: T) -> bool {
+        self.amount == object.amount()
     }
 }
 
