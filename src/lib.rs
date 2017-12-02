@@ -3,6 +3,10 @@
 // ----------------------------------
 pub trait Money {
     fn amount(&self) -> i32;
+
+    fn equals<T: Money>(&self, object: T) -> bool {
+        self.amount() == object.amount()
+    }
 }
 
 // ==================================
@@ -28,10 +32,6 @@ impl Dollar {
         Dollar {
             amount: self.amount * multiplier,
         }
-    }
-
-    pub fn equals<T: Money>(&self, object: T) -> bool {
-        self.amount == object.amount()
     }
 }
 
@@ -67,6 +67,13 @@ impl Franc {
 mod tests {
     use super::Dollar;
     use super::Franc;
+    use super::Money;
+
+    // #[test]
+    // fn test_multiplication() {
+    //     assert!("hello".equals("test"));
+    // }
+
 
     #[test]
     fn test_multiplication() {
