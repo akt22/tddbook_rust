@@ -43,6 +43,12 @@ pub struct Franc {
     amount: i32,
 }
 
+impl Money for Franc {
+    fn amount(&self) -> i32 {
+        self.amount
+    }
+}
+
 impl Franc {
     pub fn new(amount: i32) -> Franc {
         Franc { amount: amount }
@@ -52,11 +58,6 @@ impl Franc {
         Franc {
             amount: self.amount * multiplier,
         }
-    }
-
-    pub fn equals(&self, object: Franc) -> bool {
-        let franc = object;
-        self.amount == franc.amount
     }
 }
 
@@ -69,12 +70,6 @@ mod tests {
     use super::Franc;
     use super::Money;
 
-    // #[test]
-    // fn test_multiplication() {
-    //     assert!("hello".equals("test"));
-    // }
-
-
     #[test]
     fn test_multiplication() {
         let five = Dollar::new(5);
@@ -86,6 +81,8 @@ mod tests {
     fn test_equality() {
         assert!(Dollar::new(5).equals(Dollar::new(5)));
         assert_eq!(false, Dollar::new(5).equals(Dollar::new(6)));
+        assert!(Franc::new(5).equals(Franc::new(5)));
+        assert_eq!(false, Franc::new(5).equals(Franc::new(6)));
     }
 
     #[test]
