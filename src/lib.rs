@@ -3,9 +3,10 @@
 // ----------------------------------
 pub trait Money {
     fn amount(&self) -> i32;
+    fn currency(&self) -> &String;
 
     fn equals<T: Money>(&self, object: T) -> bool {
-        self.amount() == object.amount()
+        self.amount() == object.amount() && self.currency() == object.currency()
     }
 }
 
@@ -15,22 +16,31 @@ pub trait Money {
 #[derive(Debug, PartialEq)]
 pub struct Dollar {
     amount: i32,
+    currency: String,
 }
 
 impl Money for Dollar {
     fn amount(&self) -> i32 {
         self.amount
     }
+
+    fn currency(&self) -> &String {
+        &self.currency
+    }
 }
 
 impl Dollar {
     pub fn new(amount: i32) -> Dollar {
-        Dollar { amount: amount }
+        Dollar {
+            amount: amount,
+            currency: "USD".to_string(),
+        }
     }
 
     pub fn times(&self, multiplier: i32) -> Dollar {
         Dollar {
             amount: self.amount * multiplier,
+            currency: "USD".to_string(),
         }
     }
 }
@@ -41,22 +51,31 @@ impl Dollar {
 #[derive(Debug, PartialEq)]
 pub struct Franc {
     amount: i32,
+    currency: String,
 }
 
 impl Money for Franc {
     fn amount(&self) -> i32 {
         self.amount
     }
+
+    fn currency(&self) -> &String {
+        &self.currency
+    }
 }
 
 impl Franc {
     pub fn new(amount: i32) -> Franc {
-        Franc { amount: amount }
+        Franc {
+            amount: amount,
+            currency: "CHF".to_string(),
+        }
     }
 
     pub fn times(&self, multiplier: i32) -> Franc {
         Franc {
             amount: self.amount * multiplier,
+            currency: "CHF".to_string(),
         }
     }
 }
@@ -83,6 +102,7 @@ mod tests {
         assert_eq!(false, Dollar::new(5).equals(Dollar::new(6)));
         assert!(Franc::new(5).equals(Franc::new(5)));
         assert_eq!(false, Franc::new(5).equals(Franc::new(6)));
+        assert_eq!(false, Franc::new(5).equals(Dollar::new(5)));
     }
 
     #[test]
